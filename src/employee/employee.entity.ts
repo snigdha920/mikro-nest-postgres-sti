@@ -5,6 +5,7 @@ import { EmployeeRepository } from './employee.repoistory';
 export enum EmployeeType {
   MANAGER = 'MANAGER',
 }
+
 @Entity({
   discriminatorColumn: 'type',
   abstract: true,
