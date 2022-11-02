@@ -1,9 +1,10 @@
-import { Entity, Enum, Property } from '@mikro-orm/core';
+import { Entity, Enum, OptionalProps, Property } from '@mikro-orm/core';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { EmployeeRepository } from './employee.repoistory';
 
 export enum EmployeeType {
   MANAGER = 'MANAGER',
+  DIRECTOR = 'DIRECTOR',
 }
 
 @Entity({
@@ -28,6 +29,8 @@ export class Employee extends AbstractEntity {
   discriminatorValue: EmployeeType.MANAGER,
 })
 export class Manager extends Employee {
+  [OptionalProps]: 'managerProp';
+
   @Property({
     type: Number,
     default: 1,
@@ -36,5 +39,22 @@ export class Manager extends Employee {
 
   constructor() {
     super(EmployeeType.MANAGER);
+  }
+}
+
+@Entity({
+  discriminatorValue: EmployeeType.DIRECTOR,
+})
+export class Director extends Employee {
+  [OptionalProps]: 'directorProp';
+
+  @Property({
+    type: Number,
+    default: 1,
+  })
+  public directorProp = 1;
+
+  constructor() {
+    super(EmployeeType.DIRECTOR);
   }
 }
