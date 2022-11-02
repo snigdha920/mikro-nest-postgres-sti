@@ -1,17 +1,38 @@
 version: '3.6'
 
 services:
-  postgre:
+  postgres:
+    container_name: postgres
     image: postgres:15.0
     ports:
       - "5432:5432"
     volumes:
-      - postgre:/var/lib/postgresql/data
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
+      - postgres:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - postgres
+
+  pgadmin:
+    links:
+      - postgres:postgres
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - "8082:80"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - postgres
+
+
+networks:
+  postgres:
+    driver: bridge
 
 volumes:
-  postgre:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
+  data:
+  pgadmin:
+  postgres:
